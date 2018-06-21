@@ -2,7 +2,7 @@
 __author__ = 'Maybe'
 
 from scrapy import Request
-import time
+import time, re
 from scrapy.selector import Selector
 from scrapy.spiders import CrawlSpider
 from scrapy.selector import Selector
@@ -15,8 +15,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 class Taobao(CrawlSpider):
     name = 'taobao'
-    allowed_domains = []
-    start_urls = ["https://detail.tmall.com/item.htm?id=526062780845&ns=1&abbucket=18"]
+    allowed_domains = ['detail.tmall.com']
+    start_urls = [""]
     headers = {
         'user-agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
     }
@@ -53,7 +53,6 @@ class Taobao(CrawlSpider):
         按销量排序
         """
         html = browser.page_source
-        print(html)
         button_sale = browser.find_element_by_xpath('//a[@title="销量从高到低"]')
         button_sale.click()
         time.sleep(3)
@@ -75,11 +74,22 @@ class Taobao(CrawlSpider):
         browser.close()
 
         for url_1 in Urls:
+            # meta = {
+            #     'dont_redirect': True,  # 禁止网页重定向
+            #     'handle_httpstatus_list': [301, 302]  # 对哪些异常返回进行处理
+            # }
             url = 'https:'+url_1
-            yield Request(url, callback=self.parse, headers=self.headers)
+            yield Request(url, callback=self.parse, headers=self.headers, dont_filter=True)
 
     def parse(self, response):
-        print(response.body)
+        print(response.text)
+        content = response.text
+        pattern_model = re.compile(r'型号</th><td>&nbsp;(.*?)</td>')
+        pattern_name = re.compile(r'>产品名称：(.+)<')
+
+        model = re.findall(pattern_model, content)
+        name  = re.findall(pattern_name, content)
+
 
 
 
