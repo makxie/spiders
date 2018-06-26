@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 
 class TbPipeline(object):
     def __init__(self):
-        self.engine = create_engine('mysql+pymysql://root:root@192.168.88.253:3306/pa?charset=utf8')
+        self.engine = create_engine('mysql+pymysql://root:123456@192.168.88.1:3306/pa?charset=utf8')
         self.DBSession = sessionmaker(bind=self.engine)
 
     def process_item(self, item, spider):

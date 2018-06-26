@@ -13,4 +13,16 @@ class TB(Base):
     __tablename__ = 'tmall'
 
     id = Column(Integer, primary_key=True)
-
+    model =
+    productname =
+    shopname =
+    brand =
+    score =
+    title =
+    sellcount =
+    reviewcount =
+    newp =
+    promoprice =
+    ratescore =
+    rank =
+    url =
